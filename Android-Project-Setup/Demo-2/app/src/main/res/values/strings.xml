@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Demo</string>
+    <string name="registration">Registration</string>
+    <style name="username">Username</style>
+    <string name="enter_username">Enter username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_email">Enter email address</string>
+    <string name="hello_blank_fragment">First Fragment</string>
+    <string name="enter_city">Enter City Name</string>
+    <string name="updates_want">want updates ?</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="login">Login</string>
+
+    <string-array name="cities_array">
+        <item>India</item>
+        <item>USA</item>
+        <item>Canada</item>
+        <item>Other</item>
+    </string-array>
+
+</resources>
