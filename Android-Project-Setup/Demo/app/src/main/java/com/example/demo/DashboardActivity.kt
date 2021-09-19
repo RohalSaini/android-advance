@@ -1,0 +1,158 @@
+package com.example.demo
+
+import android.content.DialogInterface
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.core.view.get
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.demo.Adapter.RecylerViewAdpater
+import com.example.demo.modal.User
+import com.google.android.material.navigation.NavigationView
+import com.example.demo.databinding.ActivityDashboardBinding
+import com.example.demo.modal.Todo
+import java.lang.Exception
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.example.demo.room.TodoViewModal
+import com.example.demo.room.UserSchema
+import com.example.demo.room.UserViewModal
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+
+
+class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private val TAG = "DASHBOARD ACTIVITY"
+    lateinit var binding:ActivityDashboardBinding
+    lateinit var user:UserSchema
+    lateinit var view:DrawerLayout
+    var todoList:MutableList<Todo> = mutableListOf()
+    lateinit var adapter:RecylerViewAdpater
+    lateinit var modal: TodoViewModal
+    var mlist:MutableList<UserSchema> = mutableListOf()
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         binding = ActivityDashboardBinding.inflate(layoutInflater)
+         view = binding.root
+         setContentView(view)
+
+         // Getting data from parser
+         user = intent.extras?.getParcelable<UserSchema>("obj")!!
+         modal = ViewModelProvider(this)[TodoViewModal::class.java]
+         // Printing User Detail on Navigation View
+         Log.d(TAG,modal.readAllData.value.toString())
+         binding.navView.getHeaderView(0).findViewById<TextView>(R.id.right_side_menu).text = user.username
+
+         // navigation open on Click
+         binding.navView.setNavigationItemSelectedListener(this)
+         binding.floatAddTodo.setOnClickListener {
+             var intent = Intent(this,TodoAddActivity::class.java)
+                 intent.putExtra("obj",user)
+                 startActivity(intent)
+         }
+         try {
+             runBlocking {
+//                 viewModal
+//                 todoList = db.getTodoByEmail(email = user.email,offset = "0")
+             }
+         } catch (error:Exception){
+            Log.e(TAG,error.message.toString())
+         }
+         binding.swiperefreshLayout.setOnRefreshListener(OnRefreshListener {
+             GlobalScope.launch(Dispatchers.IO) {
+                // var db = DbHelper(this@DashboardActivity)
+                // viewModal.
+                 //var temp = db.getTodoByEmail(user.email,todoList.size.toString())
+//                 for(todo in temp) {
+//                     todoList.add(todo)
+//                 }
+//                 runOnUiThread {
+//                     adapter.notifyDataSetChanged()
+//                 }
+
+                 binding.swiperefreshLayout.isRefreshing = false
+             }
+         })
+
+         binding.layputToolbar.expandedMenu.setOnClickListener {
+             openDrawer(binding.drawerLayout)
+         }
+         if(todoList.isNotEmpty()) {
+             val staggeredGridLayoutManager = StaggeredGridLayoutManager(1,LinearLayoutManager.VERTICAL)
+             binding.emptyRecylerView.visibility = View.INVISIBLE
+             adapter = RecylerViewAdpater(this,todoList)
+             binding.baseAdpater.layoutManager = staggeredGridLayoutManager
+             binding.baseAdpater.adapter = adapter
+         }
+     }
+
+
+    private fun closeDrawer(drawerLayout: DrawerLayout) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            // drawerLayout.closeDrawer(GravityCompat.END)
+        }
+    }
+
+    private fun openDrawer(drawerLayout: DrawerLayout) {
+        drawerLayout.openDrawer(GravityCompat.START)
+    }
+    private fun logout(mainActivity: DashboardActivity) {
+                        AlertDialog.Builder(mainActivity)
+                            .setTitle("Logout")
+                            .setMessage("Are you sure you want to LogOut !!")
+                            .setPositiveButton("Yes",DialogInterface.OnClickListener {
+                                    dialog, i ->
+                                            mainActivity.finish()
+                                            var session = Session(this)
+                                                session.setLoggedIn(
+                                                    loggedIn = false,
+                                                    email = " ",
+                                                    password = "",
+                                                    username = "",
+                                                    id = "")
+                                                session.removeAll()
+                                                finish()
+                             })
+                            .setNegativeButton("No",DialogInterface.OnClickListener {
+                                    dialogInterface, _ ->
+                                dialogInterface.dismiss()
+                            }).show()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        closeDrawer(binding.drawerLayout)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            binding.navView.menu.getItem(0).itemId ->  Snackbar.make(view,"Main View is called",Snackbar.LENGTH_SHORT).show()
+            binding.navView.menu.getItem(1).itemId -> logout(this)
+        }
+        return true
+    }
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+        builder.setMessage("Do you want to Exit?")
+        builder.setPositiveButton("Yes") { _,_ -> finishAffinity() }
+        builder.setNegativeButton("No") { dialog,_ -> dialog.cancel() }
+            .create().show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+}
