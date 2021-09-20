@@ -68,9 +68,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
          binding.layputToolbar.expandedMenu.setOnClickListener {
              openDrawer(binding.drawerLayout)
          }
-         binding.swiperefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+          binding.swiperefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
              modal.viewModelScope.launch {
-                 modal.getUserWithEmail(user.email,todoList.size,limit = todoList.size+4).observe(this@DashboardActivity, Observer {
+                 modal.getUserWithEmail(email = user.email,index = todoList.size).observe(this@DashboardActivity, Observer {
                          mlist -> Log.d("User List",mlist.toString())
                          for(item in mlist) {
                              todoList.add(item)
