@@ -11,7 +11,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demo.R
-import com.example.demo.modal.Todo
 import com.example.demo.room.TodoSchema
 import com.google.android.material.snackbar.Snackbar
 

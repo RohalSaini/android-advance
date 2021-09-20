@@ -18,12 +18,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.demo.Adapter.RecylerViewAdpater
-import com.example.demo.modal.User
 import com.google.android.material.navigation.NavigationView
 import com.example.demo.databinding.ActivityDashboardBinding
-import com.example.demo.modal.Todo
 import java.lang.Exception
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.demo.room.TodoSchema
 import com.example.demo.room.TodoViewModal
@@ -67,41 +64,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
          // navigation open on Click
          binding.navView.setNavigationItemSelectedListener(this)
          binding.floatAddTodo.setOnClickListener {
-             startActivity(Intent(this,TodoAddActivity::class.java).putExtra("obj",user))
+             startActivity(Intent(this, TodoAddActivity::class.java).putExtra("obj", user))
          }
-         try {
-             runBlocking {
-//                 viewModal
-//                 todoList = db.getTodoByEmail(email = user.email,offset = "0")
-             }
-         } catch (error:Exception){
-            Log.e(TAG,error.message.toString())
-         }
-         binding.swiperefreshLayout.setOnRefreshListener(OnRefreshListener {
-             GlobalScope.launch(Dispatchers.IO) {
-                // var db = DbHelper(this@DashboardActivity)
-                // viewModal.
-                 //var temp = db.getTodoByEmail(user.email,todoList.size.toString())
-//                 for(todo in temp) {
-//                     todoList.add(todo)
-//                 }
-//                 runOnUiThread {
-//                     adapter.notifyDataSetChanged()
-//                 }
-
-                 binding.swiperefreshLayout.isRefreshing = false
-             }
-         })
-
          binding.layputToolbar.expandedMenu.setOnClickListener {
              openDrawer(binding.drawerLayout)
-         }
-         if(todoList.isNotEmpty()) {
-             val staggeredGridLayoutManager = StaggeredGridLayoutManager(1,LinearLayoutManager.VERTICAL)
-             binding.emptyRecylerView.visibility = View.INVISIBLE
-             adapter = RecylerViewAdpater(this,todoList)
-             binding.baseAdpater.layoutManager = staggeredGridLayoutManager
-             binding.baseAdpater.adapter = adapter
          }
      }
 

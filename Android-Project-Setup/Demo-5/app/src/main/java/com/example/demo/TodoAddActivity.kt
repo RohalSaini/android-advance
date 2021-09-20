@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.demo.databinding.ActivityAddTodoBinding
-import com.example.demo.modal.Todo
-import com.example.demo.modal.User
 import com.example.demo.room.TodoSchema
 import com.example.demo.room.TodoViewModal
 import com.example.demo.room.UserSchema
