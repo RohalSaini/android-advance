@@ -1,4 +1,4 @@
-package com.example.notesapp
+package com.example.notesapp.ktor
 
 import android.util.Log
 import io.ktor.client.*
