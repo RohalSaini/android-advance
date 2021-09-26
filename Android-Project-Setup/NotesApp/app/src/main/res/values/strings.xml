@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+
+    // Login fragment Strings
+    <string name="login">Login</string>
+    <string name="email_address">Enter Email Address</string>
+    <string name="password">Enter Password</string>
+    <string name="or">Or</string>
+    <string name="register_here">Register Here !</string>
+
+    // Register Fragment
+    <string name="registeration">Registration</string>
+    <string name="register">Register</string>
+    <string name="username">Enter Username</string>
+
+</resources>
