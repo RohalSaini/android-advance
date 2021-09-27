@@ -4,13 +4,14 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
+import com.example.notesapp.modal.User
 
 sealed class ApiStatus<out T : Any> {
     val <T> T.exhaustive: T
         get() = this
     object Empty : ApiStatus<Nothing>()
-    data class Success<out T : Any>(val list: T) : ApiStatus<T>()
-    data class Error(val message: String, val cause: Exception? = null) : ApiStatus<Nothing>()
+    data class Success<out T : Any>(val data: User) : ApiStatus<T>()
+    data class Error(val message: String) : ApiStatus<Nothing>()
     object Loading : ApiStatus<Nothing>()
     data class NetworkError(val message: String, val cause: Exception? = null) : ApiStatus<Nothing>()
 }

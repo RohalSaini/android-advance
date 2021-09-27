@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.notesapp.R
 import com.example.notesapp.databinding.FragmentLoginBinding
+import com.example.notesapp.fragment.dashboard.DashboardFragment
 import com.example.notesapp.fragment.login.viewmodal.LoginViewModal
 import com.example.notesapp.fragment.register.RegistrationFragment
 import com.example.notesapp.modal.UserDetail
@@ -65,8 +66,11 @@ class LoginFragment : Fragment() {
                         Log.e("Error from Registration Fragment",status.message)
                     }
                     is ApiStatus.Success -> {
-                        Log.d("Success",status.list.toString())
-                        Snackbar.make(binding.root, "Success: ${status.list.data}", Snackbar.LENGTH_LONG).show()
+                        Log.d("Success",status.data.toString())
+                        Snackbar.make(binding.root, "Success: ${status.data}", Snackbar.LENGTH_LONG).show()
+                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                        transaction.replace(R.id.container,DashboardFragment())
+                        transaction.commit()
                     }
                     is ApiStatus.NetworkError -> {
                         Snackbar.make(binding.root, "Error: ${status.message}", Snackbar.LENGTH_LONG).show()

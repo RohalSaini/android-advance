@@ -26,6 +26,13 @@ class Api :UserApi {
     }
 
     override suspend fun postlLogin(obj: UserDetail) =flow<User> {
+        emit(ktor.client.post {
+            contentType(ContentType.Application.Json)
+            body = obj
+            url("$uri/login")
+        })
+    }
+       /*
         try {
            var list = ktor.client.post<User> {
                contentType(ContentType.Application.Json)
@@ -40,5 +47,5 @@ class Api :UserApi {
         .catch {
             error ->
             Log.d("error: ","Error due to suspended object ${error.message}")
-        }
+        } */
 }

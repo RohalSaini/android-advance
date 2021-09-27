@@ -78,7 +78,7 @@ class RegistrationFragment : Fragment() {
                         Log.e("Error from Registration Fragment",status.message)
                     }
                     is ApiStatus.Success -> {
-                        Log.d("Success",status.list.toString())
+                        Log.d("Success",status.data.toString())
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.container,LoginFragment())
                         transaction.commit()

@@ -9,10 +9,8 @@ import com.example.notesapp.modal.UserDetail
 import com.example.notesapp.util.ApiStatus
 import io.ktor.util.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 const val TAG = "Registration View Modal"
 class RegisterViewModal:ViewModel() {
@@ -38,24 +36,26 @@ class RegisterViewModal:ViewModel() {
             _apiStateFlow.value = ApiStatus.Error(message = " Enter valid email address!!")
             return@launch
         }
-        userApi.postUser(obj = obj).flowOn(Dispatchers.IO).onStart {
+        userApi.postUser(obj = obj).flowOn(Dispatchers.Main).onStart {
             _apiStateFlow.value = ApiStatus.Loading
             Log.d(TAG,"POST-USER-API -> is loading !!!")
         }.catch {
                 error ->
-            _apiStateFlow.value = ApiStatus.Error(message = error.message.toString())
-            Log.e(TAG,"POST-USER-API -> has Error ${error.toString()}!!!")
+                 _apiStateFlow.value = ApiStatus.NetworkError(message = error.message.toString())
+                Log.e(TAG,"POST-USER-API -> has Error ${error}!!!")
         }.onCompletion {
             Log.d(TAG,"POST-USER-API -> has Completed!!!")
         }.collect {
                 data ->
-            Log.d(TAG,"POST-USER-API -> is collecting Data from collector !!!")
-            data.error?.let {
-                _apiStateFlow.value = ApiStatus.NetworkError(data.error.toString())
-            }
-            if(data.error.isNullOrEmpty()) {
-                _apiStateFlow.value = ApiStatus.Success(data)
-            }
+                if(data.statusCode == 200 || data.statusCode == 201) {
+                    _apiStateFlow.value = ApiStatus.Success(data)
+
+                } else {
+                    data.error?.let {
+                        _apiStateFlow.value = ApiStatus.NetworkError(data.error.toString())
+                    }
+                }
+                Log.d(TAG,"POST-USER-API -> is collecting Data from collector !!!")
         } /*
         userApi.postUser(obj = obj).onStart {
                 _apiStateFlow.value = ApiStatus.Loading
