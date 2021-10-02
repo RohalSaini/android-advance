@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:text="UPDATE TODO"
+        android:textSize="@dimen/_20sp"
+        android:textStyle="bold"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/_20dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_username"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/editext_job_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_cornor"
+        android:gravity="center"
+        android:hint="Enter Job Name"
+        android:padding="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView_username"/>
+
+    <EditText
+        android:padding="20dp"
+        android:id="@+id/editext_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_cornor"
+        android:gravity="center"
+        android:textSize="@dimen/_20sp"
+        android:hint="Enter Description about your todo"
+        app:layout_constraintTop_toBottomOf="@+id/editext_job_name"/>
+
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/ic_baseline_check_circle_outline_24"
+        android:padding="20dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
