@@ -44,6 +44,7 @@ class DashboardFragment : Fragment(), NavigationView.OnNavigationItemSelectedLis
     var totalItem: Int = 0
     var Scrollout: Int = 0
     var isScroll = false
+    var pos:Int ?= null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -175,6 +176,7 @@ class DashboardFragment : Fragment(), NavigationView.OnNavigationItemSelectedLis
         binding.emptyRecylerView.visibility = View.INVISIBLE
         adapter = RecylerViewAdapter(requireContext(),object : RecylerViewAdapter.OnClickListener {
             override fun onDelete(todo: TodoData, position: Int) {
+                 pos = position
                 OnDeleteApi(todo, position)
                 //OnDeleteApi(todo, position)
             }
@@ -234,7 +236,7 @@ class DashboardFragment : Fragment(), NavigationView.OnNavigationItemSelectedLis
         })
     }
 
-    private fun OnDeleteApi(todo: TodoData, position: Int) {
+private fun OnDeleteApi(todo: TodoData, position: Int) {
         modal.viewModelScope.launch(Dispatchers.Main) {
             modal.postDeleteTodo(obj = todo)
             modal.apiStateFlow.collect {
@@ -254,36 +256,16 @@ class DashboardFragment : Fragment(), NavigationView.OnNavigationItemSelectedLis
                         Snackbar.make(binding.root, "Success: ${status.data}", Snackbar.LENGTH_LONG).show()
                         val bundle = Bundle()
                         bundle.putParcelable("user",status.data.data)
-                        //var fragment = DashboardFragment()
-                        //fragment.arguments = bundle
-                        //val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        //transaction.replace(R.id.container,fragment)
-                        //transaction.commit()
-                        //todoList.removeAt(position)
-                        try {
-                                if(adapter.oldList.size == 1) {
-                                    var pos =0
-                                    Log.d("View Position",position.toString())
-                                    Log.d("ArrayList Size",adapter.oldList.size.toString())
-                                    Log.d("ArrayList Size", adapter.oldList[position].toString())
-                                    todoList.removeAt(pos)
-                                    adapter.oldList.removeAt(pos)
-                                    adapter.notifyItemRemoved(pos)
-                                    adapter.notifyItemRangeRemoved(pos,adapter.itemCount)
-                                } else {
-                                    Log.d("View Position",position.toString())
-                                    Log.d("ArrayList Size",adapter.oldList.size.toString())
-                                    Log.d("ArrayList Size", adapter.oldList[position].toString())
-                                    todoList.removeAt(position)
-                                    adapter.oldList.removeAt(position)
-                                    adapter.notifyItemRemoved(position)
-                                    adapter.notifyItemRangeRemoved(position,adapter.itemCount)
-                                }
-
-                                //Log.d("Tag","After deletion total arraylist of todoList is ${adapter.oldList}")
-                        }catch (Error: java.lang.Exception) {
-                            Log.e("TAG",Error.toString())
+                        pos?.let {
+                            index ->
+                            todoList.removeAt(index)
+                            adapter.oldList.removeAt(index)
+                            adapter.notifyItemRemoved(index)
+                            pos =null
                         }
+
+                            //Log.d("Tag","After deletion total arraylist of todoList is ${adapter.oldList
+
                     }
                     is ApiStatus.NetworkError -> {
                         //binding.loader.visibility = View.INVISIBLE
